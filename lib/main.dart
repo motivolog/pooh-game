@@ -1,38 +1,41 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:wordprediction/entrypage.dart';
+import 'package:pooh_game/models/words_model.dart';
+import 'package:pooh_game/pages/home_page.dart';
+import 'pages/home_page.dart';
 
-void main(List<String> args) {
-  runApp(MyApp());
+void main() {
+  runApp(const PoohGame());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class PoohGame extends StatelessWidget {
+  const PoohGame({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'flutter Demo',
-      home: splashScreen(),
+      debugShowCheckedModeBanner: false,
+      title: 'PoohGame',
+      home: SplashScreen(),
     );
   }
 }
 
-class splashScreen extends StatefulWidget {
-  const splashScreen({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  State<splashScreen> createState() => _splashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _splashScreenState extends State<splashScreen> {
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
     Timer(
         Duration(seconds: 5),
         () => Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (BuildContext) => EntryPage())));
+            MaterialPageRoute(builder: (BuildContext) => HomePage())));
   }
 
   @override
