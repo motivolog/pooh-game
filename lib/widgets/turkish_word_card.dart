@@ -4,7 +4,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:pooh_game/constants/const.dart';
+import 'package:pooh_game/models/words_model.dart';
 import '../models/model.dart';
+import 'package:pooh_game/services/words_api.dart';
 
 class TurkishWordCard extends StatefulWidget {
   const TurkishWordCard({super.key});
@@ -14,30 +16,16 @@ class TurkishWordCard extends StatefulWidget {
 }
 
 class _TurkishWordCardState extends State<TurkishWordCard> {
-  final url = 'https://pooh.popygame.com/vocabulary-01.json';
-
-  Future<MyWords> _getMyWords() async {
-    final Response = await http.get(Uri.parse(url));
-    if (Response.statusCode == 200) {
-      var _list = MyWords.fromJson(jsonDecode(Response.body));
-      return _list;
-    } else {
-      throw Exception('failted to load word');
-    }
-  }
-
   late Future<MyWords> myWords;
-  late Future<MyWords> _list;
 
   @override
   void initState() {
     super.initState();
-    myWords = _getMyWords();
-    _list = _getMyWords();
+    myWords = WordApi().getMyWords();
   }
 
   int wordCount = 0;
-  late int totalWord;
+  int totalWords = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +33,18 @@ class _TurkishWordCardState extends State<TurkishWordCard> {
       key: UniqueKey(),
       dragStartBehavior: DragStartBehavior.start,
       onDismissed: (direction) {
-        if (direction == DismissDirection.endToStart) {
-          if (wordCount < 6) {
-            setState(() {
-              wordCount++;
-            });
-          }
-        } else if (direction == DismissDirection.startToEnd) {
-          if (wordCount > 0) {
-            setState(() {
-              wordCount--;
-            });
-          }
+        if (direction == DismissDirection.endToStart &&
+            wordCount < totalWords) {
+          setState(() {
+            wordCount++;
+          });
+        } else if (direction == DismissDirection.startToEnd &&
+            wordCount > totalWords) {
+          setState(() {
+            wordCount--;
+          });
+        } else {
+          CircularProgressIndicator();
         }
       },
       child: FlipCard(
@@ -122,7 +110,7 @@ class _TurkishWordCardState extends State<TurkishWordCard> {
 
   FutureBuilder<MyWords> trWords() {
     return FutureBuilder(
-      future: _getMyWords(),
+      future: myWords,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(
@@ -141,7 +129,7 @@ class _TurkishWordCardState extends State<TurkishWordCard> {
 
   FutureBuilder<MyWords> engWords() {
     return FutureBuilder(
-      future: _getMyWords(),
+      future: myWords,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(

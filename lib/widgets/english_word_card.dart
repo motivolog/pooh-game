@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:pooh_game/constants/const.dart';
 import '../models/model.dart';
+import 'package:pooh_game/services/words_api.dart';
 
 class EnglishWordCard extends StatefulWidget {
   const EnglishWordCard({super.key});
@@ -14,27 +15,16 @@ class EnglishWordCard extends StatefulWidget {
 }
 
 class _EnglishWordCardState extends State<EnglishWordCard> {
-  final url = 'https://pooh.popygame.com/vocabulary-01.json';
-
-  Future<MyWords> _getMyWords() async {
-    final Response = await http.get(Uri.parse(url));
-    if (Response.statusCode == 200) {
-      return MyWords.fromJson(jsonDecode(Response.body));
-    } else {
-      throw Exception('failted to load word');
-    }
-  }
-
   late Future<MyWords> myWords;
 
   @override
   void initState() {
     super.initState();
-    myWords = _getMyWords();
+    myWords = WordApi().getMyWords();
   }
 
   int wordCount = 0;
-  late int totalWord;
+  var totalWord = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +32,17 @@ class _EnglishWordCardState extends State<EnglishWordCard> {
       key: UniqueKey(),
       dragStartBehavior: DragStartBehavior.start,
       onDismissed: (direction) {
-        if (direction == DismissDirection.endToStart) {
+        if (direction == DismissDirection.endToStart && wordCount < totalWord) {
           setState(() {
             wordCount++;
           });
-        } else if (direction == DismissDirection.startToEnd) {
+        } else if (direction == DismissDirection.startToEnd &&
+            wordCount > totalWord) {
           setState(() {
             wordCount--;
           });
+        } else {
+          CircularProgressIndicator();
         }
       },
       child: FlipCard(
@@ -115,7 +108,7 @@ class _EnglishWordCardState extends State<EnglishWordCard> {
 
   FutureBuilder<MyWords> trWords() {
     return FutureBuilder(
-      future: _getMyWords(),
+      future: myWords,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(
@@ -134,18 +127,29 @@ class _EnglishWordCardState extends State<EnglishWordCard> {
 
   FutureBuilder<MyWords> engWords() {
     return FutureBuilder(
-      future: _getMyWords(),
+      future: myWords,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          totalWord = snapshot.data!.dataset.length as int;
-          int itemCount = totalWord;
-          debugPrint(totalWord.toString());
           return Text(
               snapshot.data!.dataset[wordCount].word
                   .split(',')[0]
                   .replaceAll(' ', '\n')
                   .toString(),
               style: Constants.getWordTextStyle());
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+
+  FutureBuilder<MyWords> lenghtWords() {
+    return FutureBuilder(
+      future: myWords,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          return Text(snapshot.data.toString().length.toString());
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
