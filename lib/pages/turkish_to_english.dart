@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:pooh_game/widgets/english_word_card.dart';
+import '../Widget/arrows.dart';
+import '../Widget/word_card_tr.dart';
 import '../constants/const.dart';
-import '../widgets/arrows.dart';
 
-class EnglishToTurkish extends StatefulWidget {
-  const EnglishToTurkish({super.key});
+class TurkishToEnglish extends StatefulWidget {
+  const TurkishToEnglish({super.key});
 
   @override
-  State<EnglishToTurkish> createState() => _EnglishToTurkishState();
+  State<TurkishToEnglish> createState() => _TurkishToEnglishState();
 }
 
-class _EnglishToTurkishState extends State<EnglishToTurkish> {
+class _TurkishToEnglishState extends State<TurkishToEnglish> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -20,16 +20,16 @@ class _EnglishToTurkishState extends State<EnglishToTurkish> {
       appBar: AppBar(
         backgroundColor: Constants.getButtonBackgroundColor(),
         centerTitle: true,
-        title: Text('PoohGame - English to Turkish'),
+        title: const Text('PoohGame - Turkish to English'),
       ),
       body: Center(
         child: Column(
-          children: [
+          children: const [
             Arrows(),
             SizedBox(
-              height: 30,
+              height: 10,
             ),
-            EnglishWordCard(),
+            WordCardTR()
           ],
         ),
       ),

@@ -13,28 +13,26 @@ class WordModel {
     this.word,
     this.meaning,
     this.type,
-    this.reminder,
   });
 
   String? word;
   String? meaning;
   String? type;
-  List<String>? reminder;
+
+  @override
+  String toString() {
+    return word!;
+  }
 
   factory WordModel.fromJson(Map<String, dynamic> json) => WordModel(
         word: json["word"],
         meaning: json["meaning"],
         type: json["type"],
-        reminder: json["reminder"] == null
-            ? []
-            : List<String>.from(json["reminder"]!.map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
         "word": word,
         "meaning": meaning,
         "type": type,
-        "reminder":
-            reminder == null ? [] : List<dynamic>.from(reminder!.map((x) => x)),
       };
 }

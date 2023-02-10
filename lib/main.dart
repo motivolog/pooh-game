@@ -1,9 +1,6 @@
 import 'dart:async';
+import 'pages/homepage.dart';
 import 'package:flutter/material.dart';
-import 'package:pooh_game/models/words_model.dart';
-import 'package:pooh_game/pages/home_page.dart';
-import 'pages/home_page.dart';
-import 'package:pooh_game/services/words_api.dart';
 
 void main() {
   runApp(const PoohGame());
@@ -17,7 +14,7 @@ class PoohGame extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'PoohGame',
-      home: SplashScreen(),
+      home: const SplashScreen(),
     );
   }
 }
@@ -34,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-        Duration(seconds: 5),
+        const Duration(seconds: 5),
         () => Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (BuildContext) => HomePage())));
   }
@@ -43,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/entrypage.jpg'),
             fit: BoxFit.cover,
