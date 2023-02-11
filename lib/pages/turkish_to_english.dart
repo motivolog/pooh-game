@@ -25,9 +25,12 @@ class _TurkishToEnglishState extends State<TurkishToEnglish> {
       body: Center(
         child: Column(
           children: const [
-            Arrows(),
             SizedBox(
               height: 10,
+            ),
+            Arrows(),
+            SizedBox(
+              height: 40,
             ),
             WordCardTR()
           ],

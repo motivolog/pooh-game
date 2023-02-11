@@ -16,6 +16,10 @@ class Constants {
     return Colors.grey.shade900;
   }
 
+  static MaterialColor getThemeColor() {
+    return Colors.grey;
+  }
+
   static Color getButtonTextColor() {
     return Colors.grey.shade900;
   }

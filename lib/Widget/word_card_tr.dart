@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:text_to_speech/text_to_speech.dart';
 import '../constants/const.dart';
 import '../models/word_model.dart';
 import '../services/services.dart';
@@ -14,14 +17,13 @@ class WordCardTR extends StatefulWidget {
 
 class _WordCardTRState extends State<WordCardTR> {
   late Future<List<WordModel>> _wordListFuture;
+  TextToSpeech tts = TextToSpeech();
 
   @override
   void initState() {
     super.initState();
     _wordListFuture = WordApi.getWordsData();
   }
-
-  var wordCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +33,16 @@ class _WordCardTRState extends State<WordCardTR> {
         if (snapshot.hasData) {
           List<WordModel> myWordList = snapshot.data!;
           var totalWord = myWordList.length;
+          var randomNum = Random().nextInt(totalWord);
+          var wordCount = randomNum;
+          String word = myWordList[wordCount].word.toString();
+          String meaning = myWordList[wordCount].meaning.toString();
           return Dismissible(
             key: UniqueKey(),
             dragStartBehavior: DragStartBehavior.start,
             onDismissed: (direction) {
               if (direction == DismissDirection.endToStart &&
                   wordCount < totalWord - 1) {
-                debugPrint(totalWord.toString());
                 setState(() {
                   wordCount++;
                 });
@@ -75,10 +80,12 @@ class _WordCardTRState extends State<WordCardTR> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      tts.setLanguage("tr-TR");
+                                      tts.speak(meaning.split(',')[0]);
+                                    },
                                     child: Text(
-                                      myWordList[wordCount]
-                                          .meaning
+                                      meaning
                                           .toString()
                                           .split(',')[0]
                                           .replaceAll(' ', '\n'),
@@ -111,10 +118,12 @@ class _WordCardTRState extends State<WordCardTR> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                tts.setLanguage("en-US");
+                                tts.speak(word.split(',')[0]);
+                              },
                               child: Text(
-                                  myWordList[wordCount]
-                                      .word
+                                  word
                                       .toString()
                                       .split(',')[0]
                                       .replaceAll(' ', '\n'),

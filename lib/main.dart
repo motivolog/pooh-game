@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:wordprediction/constants/const.dart';
 import 'pages/homepage.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +12,10 @@ class PoohGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'PoohGame',
-      home: const SplashScreen(),
+      home: SplashScreen(),
     );
   }
 }
